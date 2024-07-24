@@ -16,7 +16,7 @@ jobs:
   create-tag:
     runs-on: ubuntu-latest
     steps:
-      # Checkout del código del repositorio
+      # Checkout del código del repositori
       - name: Checkout code
         uses: actions/checkout@v4
 
