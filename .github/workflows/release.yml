@@ -1,12 +1,28 @@
-name: Create Release
+name: CI Tagging and Release
 
 on:
   push:
-    tags:
-      - 'v*.*.*'  # Ejecutar este workflow solo cuando se empuje un tag que siga el formato de versión
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
 
 jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create Tag
+        id: create_tag
+        run: |
+          TAG_NAME="v$(date +'%Y%m%d%H%M%S')"
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
+
   create-release:
+    needs: create-tag
     runs-on: ubuntu-latest
 
     steps:
