@@ -1,10 +1,12 @@
-// test/test.js
-const assert = require('assert');
+const assert = require('chai').assert;
 
-describe('Array', function () {
-  describe('#indexOf()', function () {
-    it('should return -1 when the value is not present', function () {
-      assert.strictEqual([1, 2, 3].indexOf(4), -1);
-    });
+// Función a probar
+function suma(a, b) {
+  return a + b;
+}
+
+describe('Función de Suma', function() {
+  it('debería sumar dos números correctamente', function() {
+    assert.equal(suma(2, 3), 5);
   });
 });
