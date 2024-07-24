@@ -1,0 +1,41 @@
+name: Auto Tagging
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Definición de los jobs
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout del código del repositorio
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Crear un nuevo tag basado en el commit actual
+      - name: Create Tag
+        id: tag
+        run: |
+          # Generar un nuevo tag basado en la fecha y hora
+          TAG_NAME="v$(date +'%Y%m%d%H%M%S')"
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
+
+      # Opcional: Añadir un release en GitHub con el nuevo tag
+      - name: Create Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ steps.tag.outputs.TAG_NAME }}
+          release_name: Release ${{ steps.tag.outputs.TAG_NAME }}
+          body: |
+            Auto-generated release for tag ${{ steps.tag.outputs.TAG_NAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
