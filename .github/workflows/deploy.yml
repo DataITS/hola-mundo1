@@ -16,7 +16,7 @@ jobs:
       uses: actions/checkout@v4  # Obtiene el código del repositorio
 
     - name: Setup Pages
-      uses: actions/setup-pages@v4  # Configura GitHub Pages
+      uses: actions/setup-pages@v2  # Configura GitHub Pages
 
     - name: Deploy
       run: |
