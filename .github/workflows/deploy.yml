@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3  # Obtiene el código del repositorio
+      uses: actions/checkout@v4  # Obtiene el código del repositorio
 
     - name: Setup Pages
       uses: actions/setup-pages@v2  # Configura GitHub Pages
