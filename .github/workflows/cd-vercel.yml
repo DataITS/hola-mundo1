@@ -1,0 +1,41 @@
+# This is a basic workflow to help you get started with Action
+
+name: Deploy to Netlify
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Bump version and tag
+        run: |
+          npm version patch
+          git push origin main
+          git push --tags
+
+      - name: Deploy to Vercel
+        run: npx vercel --prod --confirm --token ${{ secrets.VERCEL_TOKEN }} --scope ${{ secrets.VERCEL_USER_ID }} --project ${{ secrets.VERCEL_PROJECT_NAME }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+
