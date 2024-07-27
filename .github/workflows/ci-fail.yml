@@ -36,10 +36,12 @@ jobs:
       # Ejecutar pruebas
       - name: Run tests
         run: npm test
-        
+          
       - name: Notify Slack
-        if: failure()
         uses: 8398a7/action-slack@v3
+        if: failure()
         with:
-          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          message: 'Build failed! Check the logs for details.'
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
