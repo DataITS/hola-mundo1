@@ -43,6 +43,7 @@ jobs:
 
     steps:
       - name: Notify Slack
+        if: failure()
         uses: 8398a7/action-slack@v3
         with:
           webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
