@@ -15,6 +15,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4  # Obtiene el código del repositorio
 
+    - name: Create .nojekyll file
+      run: echo "" > .nojekyll  # Crea un archivo vacío .nojekyll para deshabilitar Jekyll en GitHub Pages
+      
     - name: Deploy to GitHub Pages
       run: |
         git config --global user.email "itsdata0@gmail.com"
