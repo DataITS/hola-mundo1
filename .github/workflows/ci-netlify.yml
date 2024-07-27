@@ -28,4 +28,4 @@ jobs:
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       run: |
-        netlify deploy --prod --dir=./
+        netlify deploy --prod --dir=./ --site=ddd0407d-a883-4660-ae24-324b0082ffff
