@@ -33,5 +33,5 @@ jobs:
       - name: Bump version and tag
         run: |
           npm version patch
-          git push origin main
+          git push origin master
           git push --tags
