@@ -32,5 +32,5 @@ jobs:
         run: |
           echo "Deployment failed. Rolling back to the previous version..."
           # Revertimos al commit anterior
-          git reset --hard HEAD^
-          git push --force
+          git revert --no-edit HEAD
+          git push
