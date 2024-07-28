@@ -34,6 +34,10 @@ jobs:
           npm version patch
           git push origin master
           git push --tags
+          
+      # Pull latest changes from remote
+      - name: Pull latest changes
+        run: git pull origin master
 
       # Set up Docker
       - name: Set up Docker Buildx
