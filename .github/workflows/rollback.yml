@@ -27,10 +27,9 @@ jobs:
         run: npm run build
         
 
-      - name: Rollback if deployment failed
-        if: failure()
+      - name: Revert pushed commit
         run: |
-          echo "Deployment failed. Rolling back to the previous version..."
-          # Revertimos al commit anterior
+          git config --global user.name 'DataITS'
+          git config --global user.email 'itsdata0@gmail.com'
           git revert --no-edit HEAD
           git push
