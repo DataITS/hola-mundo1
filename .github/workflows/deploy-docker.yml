@@ -54,6 +54,6 @@ jobs:
       - name: Build and push Docker image
         run: |
           VERSION=$(npm pkg get version | tr -d '"')
-          docker build -t myapp:$VERSION .
+          docker buildx build --platform linux/amd64 -t myapp:$VERSION .
           docker tag myapp:$VERSION usernetc/myapp:$VERSION
           docker push usernetc/myapp:$VERSION
