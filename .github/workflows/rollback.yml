@@ -1,0 +1,43 @@
+name: Deploy with Rollback
+
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to Production
+        id: deploy
+        run: |
+          echo "Deploying to production..."
+          # Simulamos un despliegue
+          echo "Deployment successful" # Cambia esto por tu comando real de despliegue
+        continue-on-error: true
+
+      - name: Rollback if deployment failed
+        if: failure()
+        run: |
+          echo "Deployment failed. Rolling back to the previous version..."
+          # Revertimos al commit anterior
+          git reset --hard HEAD^
+          git push --force
