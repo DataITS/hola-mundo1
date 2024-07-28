@@ -33,6 +33,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Clean working directory
+        run: |
+          git checkout .
+          git clean -fdx
+
       - name: Bump version and tag
         run: |
           npm version patch
