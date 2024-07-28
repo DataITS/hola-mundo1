@@ -25,14 +25,7 @@ jobs:
 
       - name: Build project
         run: npm run build
-
-      - name: Deploy to Production
-        id: deploy
-        run: |
-          echo "Deploying to production..."
-          # Simulamos un despliegue
-          echo "Deployment successful" # Cambia esto por tu comando real de despliegue
-        continue-on-error: true
+        
 
       - name: Rollback if deployment failed
         if: failure()
