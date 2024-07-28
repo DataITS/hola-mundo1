@@ -1,7 +1,6 @@
-name: Versioning and Deployment
+name: Versioning and Deployment Docker
 
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
     branches: [ "master" ]
   pull_request:
@@ -26,20 +25,25 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Bump version and create tag
-      - name: Bump version and create tag
+      # Configure git user
+      - name: Set Git user
         run: |
           git config --global user.email "itsdata0@gmail.com"
           git config --global user.name "DataITS"
-          npm version patch
-          git push origin master
-          git push --tags
-          
+
       # Pull latest changes from remote
       - name: Pull latest changes
         run: git pull origin master
 
-      # Set up Docker
+      # Bump version and create tag
+      - name: Bump version and create tag
+        run: |
+          npm version patch
+          git pull origin master --rebase
+          git push origin master
+          git push --tags
+
+      # Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
