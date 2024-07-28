@@ -1,4 +1,4 @@
-name: Versioning and Deployment
+name: Versioning and Deployment Docker
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '14'
 
       - name: Install dependencies
         run: npm install
@@ -31,15 +31,21 @@ jobs:
         run: git stash --include-untracked
 
       - name: Pull latest changes from remote
-        run: git pull origin master
+        run: |
+          git pull origin master || true
+          git reset --hard origin/master
 
       - name: Apply stashed changes
-        run: git stash pop
+        run: git stash pop || true
+
+      - name: Resolve merge conflicts
+        run: |
+          git add package-lock.json
+          git commit -m "Resolved merge conflicts"
 
       - name: Bump version and create tag
         run: |
           npm version patch
-          git pull origin master --rebase || git rebase --abort
           git push origin master
           git push --tags
 
