@@ -25,6 +25,11 @@ jobs:
         with:
           node-version: '14'
 
+      - name: Configure Git
+        run: |
+          git config --global user.email "dataits0@gmail.com"
+          git config --global user.name "DataITS"
+
       - name: Install dependencies
         run: npm install
 
