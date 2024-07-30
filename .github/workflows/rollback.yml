@@ -30,35 +30,23 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # Deploy to Production (this will fail)
       - name: Deploy to Production
         id: deploy
         run: |
           echo "Deploying to production..."
-          exit 1  # Forzamos un error para simular un despliegue fallido
+          # Simula un fallo en el despliegue
+          exit 1
         continue-on-error: true
 
-      # Debug: Check deployment status
-      - name: Debug:Check deployment status
-        if: always()
-        run: |
-          if [ "${{ steps.deploy.outcome }}" == "failure" ]; then
-            echo "Deployment failed. This should trigger rollback steps."
-          else
-            echo "Deployment succeeded. No rollback needed."
-          fi
-
-      # Rollback if deployment failed
       - name: Rollback if deployment failed
-        if: always()
+        if: failure()
         run: |
-          if [ "${{ steps.deploy.outcome }}" == "failure" ]; then
-            echo "Deployment failed. Rolling back to the previous version..."
-            if git rev-parse HEAD^ >/dev/null 2>&1; then
-              git reset --hard HEAD^
-              git push --force
-              echo "Rollback completed successfully"
-            else
-              echo "No previous commit to roll back to. Rollback not performed."
-            fi
+          echo "Deployment failed. Rolling back to the previous version..."
+          # Solo rollback si hay al menos dos commits
+          if [ "$(git rev-list --count HEAD)" -gt 1 ]; then
+            git reset --hard HEAD^
+            git push origin master --force
+            echo "Rollback completed successfully"
+          else
+            echo "Not enough commits to roll back. Rollback not performed."
           fi
