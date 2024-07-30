@@ -1,39 +1,44 @@
 name: Deploy with Rollback
 
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches:
+      - master
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # Asegurarnos de tener al menos dos commits en el historial
 
+      # Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '14'
 
+      # Install dependencies
       - name: Install dependencies
         run: npm install
 
+      # Build the project
       - name: Build project
         run: npm run build
 
-      - name: Deploy to Production (this will fail)
+      # Deploy to Production (this will fail)
+      - name: Deploy to Production
         id: deploy
         run: |
           echo "Deploying to production..."
-          # Simulamos un despliegue fallido
           exit 1  # Forzamos un error para simular un despliegue fallido
         continue-on-error: true
 
+      # Debug: Check deployment status
       - name: Debug:Check deployment status
         if: always()
         run: |
@@ -43,6 +48,7 @@ jobs:
             echo "Deployment succeeded. No rollback needed."
           fi
 
+      # Rollback if deployment failed
       - name: Rollback if deployment failed
         if: always()
         run: |
