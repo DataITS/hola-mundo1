@@ -34,13 +34,21 @@ jobs:
           exit 1  # Forzamos un error para simular un despliegue fallido
         continue-on-error: true
 
-      - name: Debug:Check if deployment failed
-        if: failure()
-        run: echo "Deployment failed. This should trigger rollback steps."
+      - name: Debug:Check deployment status
+        if: always()
+        run: |
+          if [ "${{ steps.deploy.outcome }}" == "failure" ]; then
+            echo "Deployment failed. This should trigger rollback steps."
+          else
+            echo "Deployment succeeded. No rollback needed."
+          fi
 
       - name: Rollback if deployment failed
-        if: failure()
+        if: always()
         run: |
-          echo "Deployment failed. Rolling back to the previous version..."
-          git reset --hard HEAD^
-          git push --force
+          if [ "${{ steps.deploy.outcome }}" == "failure" ]; then
+            echo "Deployment failed. Rolling back to the previous version..."
+            git reset --hard HEAD^
+            git push --force
+            echo "Rollback completed successfully"
+          fi
