@@ -25,11 +25,20 @@ jobs:
 
       - name: Build project
         run: npm run build
-        
 
-      - name: Revert pushed commit
+      - name: Deploy to Production
+        id: deploy
         run: |
-          git config --global user.name 'DataITS'
-          git config --global user.email 'itsdata0@gmail.com'
-          git revert --no-edit HEAD
-          git push
+          echo "Deploying to production..."
+          # Simulamos un despliegue
+          echo "Deployment successful" # Cambia esto por tu comando real de despliegue
+        continue-on-error: true
+
+      - name: Rollback if deployment failed
+        if: failure()
+        run: |
+          echo "Deployment failed. Rolling back to the previous version..."
+          # Revertimos al commit anterior
+          git reset --hard HEAD^
+          git push --force
+
