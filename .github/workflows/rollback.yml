@@ -48,7 +48,11 @@ jobs:
         run: |
           if [ "${{ steps.deploy.outcome }}" == "failure" ]; then
             echo "Deployment failed. Rolling back to the previous version..."
-            git reset --hard HEAD^
-            git push --force
-            echo "Rollback completed successfully"
+            if git rev-parse HEAD^ >/dev/null 2>&1; then
+              git reset --hard HEAD^
+              git push --force
+              echo "Rollback completed successfully"
+            else
+              echo "No previous commit to roll back to. Rollback not performed."
+            fi
           fi
