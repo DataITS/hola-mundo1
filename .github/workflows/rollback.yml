@@ -34,10 +34,13 @@ jobs:
           exit 1  # Forzamos un error para simular un despliegue fallido
         continue-on-error: true
 
+      - name: Debug:Check if deployment failed
+        if: failure()
+        run: echo "Deployment failed. This should trigger rollback steps."
+
       - name: Rollback if deployment failed
         if: failure()
         run: |
           echo "Deployment failed. Rolling back to the previous version..."
-          # Revertimos al commit anterior
           git reset --hard HEAD^
           git push --force
