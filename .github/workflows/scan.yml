@@ -21,7 +21,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Run security scan
-      uses: actions/security-scan@v2
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
       with:
-        args: "scan --target ./src"
+        languages: javascript
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
