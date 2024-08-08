@@ -19,10 +19,12 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
-    - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@v0.0.19
+    - name: Run Trivy scan
+      uses: aquasecurity/trivy-action@v0.2.0
       with:
-        image-ref: 'docker.io/library/alpine:latest'
-
+        scan-type: 'fs'
+        severity: 'HIGH,CRITICAL'
+        ignore-unfixed: true
+        exit-code: '1'
