@@ -19,12 +19,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v2
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@v0.0.19
       with:
-        languages: javascript
+        image-ref: 'docker.io/library/alpine:latest'
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
