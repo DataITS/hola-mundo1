@@ -1,0 +1,33 @@
+name: Security Audit
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+    audit:
+      runs-on: ubuntu-latest
+  
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+  
+      - name: Run security audit
+        run: |
+          echo "Running security audit..."
+          # Ejecuta herramientas de auditoría, e.g., Trivy, Clair, etc.
+          trivy fs --exit-code 1 --severity HIGH,CRITICAL .
+          echo "Audit complete."
+  
+      - name: Store logs
+        uses: actions/upload-artifact@v2
+        with:
+          name: audit-logs
+          path: ./audit-logs
