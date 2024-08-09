@@ -12,19 +12,32 @@ on:
   workflow_dispatch:
 
 jobs:
-    audit:
-      runs-on: ubuntu-latest
-  
-      steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-  
-      - name: Run security audit
-        run: |
-          echo "Running security audit..."
-          # Ejecuta herramientas de auditoría, e.g., Trivy, Clair, etc.
-          trivy fs --exit-code 1 --severity HIGH,CRITICAL .
-          echo "Audit complete."
+  jobs:
+  audit:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Trivy
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install wget -y
+        wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.42.0_Linux-64bit.deb
+        sudo dpkg -i trivy_0.42.0_Linux-64bit.deb
+
+    - name: Run security audit
+      run: |
+        echo "Running security audit..."
+        trivy fs --exit-code 1 --severity HIGH,CRITICAL .
+        echo "Audit complete."
+
+    - name: Store logs
+      uses: actions/upload-artifact@v2
+      with:
+        name: audit-logs
+        path: ./audit-logs
   
       - name: Store logs
         uses: actions/upload-artifact@v2
