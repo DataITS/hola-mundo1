@@ -12,7 +12,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  jobs:
   audit:
     runs-on: ubuntu-latest
 
